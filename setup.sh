@@ -73,4 +73,4 @@ fl() {
 	}
 	g
 	read
-	bash ~/Termux-OS/installing.sh
+	bash ~/Termux-os2/installing.sh
