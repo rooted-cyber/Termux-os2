@@ -1,7 +1,7 @@
 R () {
 	cd $PREFIX/bin
 	if [ -e python ];then
-	python ~/Termux-os2/.random.py > /dev/null 2>&1
+	python ~/Termux-os2/.random.py
 	else
 	pkg install python
 	python ~/Termux-os2/.random.py
