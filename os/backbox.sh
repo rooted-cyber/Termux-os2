@@ -1,10 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/bash
-folder=kali-fs
+folder=backbox-fs
 if [ -d "$folder" ]; then
 	first=1
 	echo "skipping downloading"
 fi
-tarball="kali-rootfs.tar.xz"
+tarball="backbox-rootfs.tar.xz"
 if [ "$first" != 1 ];then
 	if [ ! -f $tarball ]; then
 		echo "Download Rootfs, this may take a while base on your internet speed."
@@ -24,7 +24,7 @@ if [ "$first" != 1 ];then
 		*)
 			echo "unknown architecture"; exit 1 ;;
 		esac
-		wget "https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Rootfs/Kali/${archurl}/kali-rootfs-${archurl}.tar.xz" -O $tarball
+		wget "https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Rootfs/BackBox/${archurl}/backbox-rootfs-${archurl}.tar.xz" -O $tarball
 	fi
 	cur=`pwd`
 	mkdir -p "$folder"
@@ -33,8 +33,8 @@ if [ "$first" != 1 ];then
 	proot --link2symlink tar -xJf ${cur}/${tarball}||:
 	cd "$cur"
 fi
-mkdir -p kali-binds
-bin=start-kali.sh
+mkdir -p backbox-binds
+bin=start-backbox.sh
 echo "writing launch script"
 cat > $bin <<- EOM
 #!/bin/bash
@@ -45,14 +45,14 @@ command="proot"
 command+=" --link2symlink"
 command+=" -0"
 command+=" -r $folder"
-if [ -n "\$(ls -A kali-binds)" ]; then
-    for f in kali-binds/* ;do
+if [ -n "\$(ls -A backbox-binds)" ]; then
+    for f in backbox-binds/* ;do
       . \$f
     done
 fi
 command+=" -b /dev"
 command+=" -b /proc"
-command+=" -b kali-fs/root:/dev/shm"
+command+=" -b backbox-fs/root:/dev/shm"
 ## uncomment the following line to have access to the home directory of termux
 #command+=" -b /data/data/com.termux/files/home:/root"
 ## uncomment the following line to mount /sdcard directly to / 
@@ -78,4 +78,4 @@ echo "making $bin executable"
 chmod +x $bin
 echo "removing image for some space"
 rm $tarball
-#echo "\033[1;92m You can now launch Kali with this command :- kali"
+#echo "You can now launch Backbox with the ./${bin} script"

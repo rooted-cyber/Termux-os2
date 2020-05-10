@@ -1,16 +1,15 @@
 #!/data/data/com.termux/files/usr/bin/bash
-folder=kali-fs
 if [ -d "$folder" ]; then
 	first=1
 	echo "skipping downloading"
 fi
-tarball="kali-rootfs.tar.xz"
+tarball="nethunter-rootfs.tar.gz"
 if [ "$first" != 1 ];then
 	if [ ! -f $tarball ]; then
 		echo "Download Rootfs, this may take a while base on your internet speed."
 		case `dpkg --print-architecture` in
 		aarch64)
-			archurl="arm64" ;;
+			archurl="arm64" ;;	
 		arm)
 			archurl="armhf" ;;
 		amd64)
@@ -24,17 +23,21 @@ if [ "$first" != 1 ];then
 		*)
 			echo "unknown architecture"; exit 1 ;;
 		esac
-		wget "https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Rootfs/Kali/${archurl}/kali-rootfs-${archurl}.tar.xz" -O $tarball
+		wget "https://build.nethunter.com/kalifs/kalifs-latest/kalifs-${archurl}-full.tar.xz" -O $tarball
 	fi
 	cur=`pwd`
-	mkdir -p "$folder"
-	cd "$folder"
 	echo "Decompressing Rootfs, please be patient."
-	proot --link2symlink tar -xJf ${cur}/${tarball}||:
+	proot --link2symlink tar -xJf ${cur}/${tarball} --exclude='dev'||:
 	cd "$cur"
 fi
-mkdir -p kali-binds
-bin=start-kali.sh
+mv kali-${archurl} nethunter-fs
+rm nethunter-fs/etc/apt/sources.list
+rm -rf nethunter-fs/dev
+echo "deb http://mirror.fsmg.org.nz/kali kali-rolling main contrib non-free" >> nethunter-fs/etc/apt/sources.list
+echo "deb-src http://mirror.fsmg.org.nz/kali kali-rolling main contrib non-free" >> nethunter-fs/etc/apt/sources.list
+wget https://archive.kali.org/archive-key.asc -O nethunter-fs/etc/apt/trusted.gpg.d/kali-archive-key.asc
+mkdir -p nethunter-binds
+bin=start-nethunter.sh
 echo "writing launch script"
 cat > $bin <<- EOM
 #!/bin/bash
@@ -44,15 +47,15 @@ unset LD_PRELOAD
 command="proot"
 command+=" --link2symlink"
 command+=" -0"
-command+=" -r $folder"
-if [ -n "\$(ls -A kali-binds)" ]; then
-    for f in kali-binds/* ;do
+command+=" -r nethunter-fs"
+if [ -n "\$(ls -A nethunter-binds)" ]; then
+    for f in nethunter-binds/* ;do
       . \$f
     done
 fi
 command+=" -b /dev"
 command+=" -b /proc"
-command+=" -b kali-fs/root:/dev/shm"
+command+=" -b nethunter-fs/root:/dev/shm"
 ## uncomment the following line to have access to the home directory of termux
 #command+=" -b /data/data/com.termux/files/home:/root"
 ## uncomment the following line to mount /sdcard directly to / 
@@ -78,4 +81,4 @@ echo "making $bin executable"
 chmod +x $bin
 echo "removing image for some space"
 rm $tarball
-#echo "\033[1;92m You can now launch Kali with this command :- kali"
+#echo "You can now launch Kali Nethunter with the ./${bin} script"

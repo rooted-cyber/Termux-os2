@@ -1,10 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/bash
-folder=kali-fs
+folder=centos-fs
 if [ -d "$folder" ]; then
 	first=1
 	echo "skipping downloading"
 fi
-tarball="kali-rootfs.tar.xz"
+tarball="centos-rootfs.tar.xz"
 if [ "$first" != 1 ];then
 	if [ ! -f $tarball ]; then
 		echo "Download Rootfs, this may take a while base on your internet speed."
@@ -24,17 +24,23 @@ if [ "$first" != 1 ];then
 		*)
 			echo "unknown architecture"; exit 1 ;;
 		esac
-		wget "https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Rootfs/Kali/${archurl}/kali-rootfs-${archurl}.tar.xz" -O $tarball
+		wget "https://raw.githubusercontent.com/EXALAB/AnLinux-Resources/master/Rootfs/CentOS/${archurl}/centos-rootfs-${archurl}.tar.xz" -O $tarball
 	fi
 	cur=`pwd`
 	mkdir -p "$folder"
 	cd "$folder"
 	echo "Decompressing Rootfs, please be patient."
-	proot --link2symlink tar -xJf ${cur}/${tarball}||:
+	proot --link2symlink tar -xJf ${cur}/${tarball} --exclude='dev'||:
+	
+	echo "Setting up name server"
+	echo "127.0.0.1 localhost" > etc/hosts
+    echo "nameserver 8.8.8.8" > etc/resolv.conf
+    echo "nameserver 8.8.4.4" >> etc/resolv.conf
 	cd "$cur"
 fi
-mkdir -p kali-binds
-bin=start-kali.sh
+mkdir -p centos-binds
+mkdir -p centos-fs/tmp
+bin=start-centos.sh
 echo "writing launch script"
 cat > $bin <<- EOM
 #!/bin/bash
@@ -45,14 +51,14 @@ command="proot"
 command+=" --link2symlink"
 command+=" -0"
 command+=" -r $folder"
-if [ -n "\$(ls -A kali-binds)" ]; then
-    for f in kali-binds/* ;do
+if [ -n "\$(ls -A centos-binds)" ]; then
+    for f in centos-binds/* ;do
       . \$f
     done
 fi
 command+=" -b /dev"
 command+=" -b /proc"
-command+=" -b kali-fs/root:/dev/shm"
+command+=" -b centos-fs/root:/dev/shm"
 ## uncomment the following line to have access to the home directory of termux
 #command+=" -b /data/data/com.termux/files/home:/root"
 ## uncomment the following line to mount /sdcard directly to / 
@@ -78,4 +84,4 @@ echo "making $bin executable"
 chmod +x $bin
 echo "removing image for some space"
 rm $tarball
-#echo "\033[1;92m You can now launch Kali with this command :- kali"
+#echo "You can now launch CentOS with the ./${bin} script"
