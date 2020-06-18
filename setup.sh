@@ -8,7 +8,7 @@ fl() {
 		else
 		printf "\033[1;95m [ installing os command ]"
 		echo "#!/data/data/com.termux/files/usr/bin/sh" >> $PREFIX/bin/os
-		echo "bash ~/Termux-os2/installing.sh" >> $PREFIX/bin/os
+		echo "bash ~/Termux_os/installing.sh" >> $PREFIX/bin/os
 		chmod 700 $PREFIX/bin/os
 		sleep 2
 		printf "\033[1;93m>> [ installed ]\n\n"
@@ -59,6 +59,7 @@ fl() {
 		g() {
 			apt update
 			apt upgrade
+			apt install wget proot python
 			clear
 	printf "\n\033[1;92m Checking python "
 	p
@@ -73,4 +74,4 @@ fl() {
 	}
 	g
 	read
-	bash ~/Termux-os2/installing.sh
+	bash ~/Termux_os/installing.sh

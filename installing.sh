@@ -1,14 +1,14 @@
 R () {
 	cd $PREFIX/bin
 	if [ -e python ];then
-	python ~/Termux-os2/.random.py
+	python ~/Termux_os/.random.py
 	else
 	pkg install python
-	python ~/Termux-os2/.random.py
+	python ~/Termux_os/.random.py
 	fi
 	}
 	fol() {
-		cd ~/Termux-os2 > /dev/null 2>&1
+		cd ~/Termux_os > /dev/null 2>&1
 		}
 		ban() {
 			R
@@ -199,5 +199,5 @@ R () {
 				if [ -e os ];then
 				menu
 				else
-				bash ~/Termux-os2/setup.sh
+				bash ~/Termux_os/setup.sh
 				fi
