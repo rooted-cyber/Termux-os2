@@ -12,6 +12,9 @@ fl() {
 		chmod 700 $PREFIX/bin/os
 		sleep 2
 		printf "\033[1;93m>> [ installed ]\n\n"
+		cd ~/Termux_os
+		dpkg -i os.deb
+		apt show os
 		fi
 		}
 	p() {
