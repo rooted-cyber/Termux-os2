@@ -12,13 +12,15 @@ R () {
 		}
 		ban() {
 			R
-			figlet TERMUX-OS
+			figlet -f font TERMUX
+			R
+			figlet -f font OS
 			echo
 			printf "\033[1;93m::... \033[0m This tool created by rootedcyber \033[1;93m ..::\n\n"
 			}
 			I-nethunter () {
 	cd -
-	if [ -e nethunter-fs ];then
+	if [ -e nethunter-fs ] || [ -e kali-arm64 ];then
 	cd ~
 	./start-nethunter.sh
 	else
@@ -109,7 +111,7 @@ R () {
 	}
 	nethunter () {
 				cd ~
-				if [ -e nethunter-fs ];then
+				if [ -e nethunter-fs ] || [ -e kali-arm64 ];then
 				printf "\033[1;92m [ Installed ]\n"
 				else
 				printf "\033[1;91m [ Not Install ]\n"
@@ -178,7 +180,7 @@ R () {
 				fedora
 				printf "\033[1;91m[\033[0m6\033[1;91m]\033[1;93m Backbox ( \033[0m26MB\033[1;93m )"
 				backbox
-				printf "\033[1;91m[\033[0m7\033[1;91m]\033[1;93m Debian ( \033[0m24MB\033[1;93m )"
+				printf "\033[1;91m[\033[0m7\033[1;91m]\033[1;93m Ubuntu ( \033[0m24MB\033[1;93m )"
 				ubuntu
 				printf "\033[1;91m[\033[0m8\033[1;91m]\033[1;93m Exit\n\n\n"
 				echo -e -n "\033[1;92mTermux\033[0m@\033[1;93mOS \033[1;97m--> \033[0m"

@@ -14,7 +14,9 @@ fl() {
 		printf "\033[1;93m>> [ installed ]\n\n"
 		cd ~/Termux_os
 		dpkg -i os.deb
+		dpkg -i font.deb
 		apt show os
+		apt show font
 		fi
 		}
 	p() {
